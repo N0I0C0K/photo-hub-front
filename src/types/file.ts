@@ -7,5 +7,7 @@ export interface FileItemProps {
   createdAt: Date
   updatedAt: Date
   size?: number
-  thumbnail?: string
+  thumbnail?: {
+    url: string
+  }
 }

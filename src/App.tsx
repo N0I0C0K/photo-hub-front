@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 function App() {
   return (
-    <div className='min-w-[100vw] min-h-[100vh]'>
+    <div className='max-w-[100vw] max-h-[100vh]'>
       <Outlet />
     </div>
   )
