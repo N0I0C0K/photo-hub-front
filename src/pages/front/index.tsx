@@ -20,23 +20,16 @@ const ImageItem: FC<{
     return (100 - zIndex * 6) / 100
   }, [zIndex])
   const color = useTransform(x, xInput, [
-    'rgb(211, 9, 225)',
-    'rgb(68, 0, 255)',
-    'rgb(3, 209, 0)',
+    'rgb(2, 9, 0)',
+    'rgb(68, 123, 123)',
+    'rgb(200, 209, 0)',
   ])
   const tickPath = useTransform(x, [10, 200], [0, 1.1])
   const tickRotaDeg = useTransform(x, xInput, [-8, 0, 8])
   const tickRota = useTransform(tickRotaDeg, (v) => `rotate(${v}deg)`)
-  const tickBrightness = useTransform(
-    x,
-    (v) =>
-      `blur(${(1.1 * Math.abs(v)) / 200}px) brightness(${
-        (1000 - Math.abs(v)) / 1000
-      })`
-  )
   return (
     <motion.div
-      className={cn(className, 'w-[100%]')}
+      className={cn(className, 'w-[100%] will-change-auto touch-none')}
       style={{
         zIndex: 100 - zIndex,
         x,
@@ -52,33 +45,42 @@ const ImageItem: FC<{
       whileTap={{
         scale: scale * 1.05,
       }}
-      drag
-      dragConstraints={{ left: 0, right: 0, bottom: 0, top: 0 }}
       onDragEnd={(ev, info) => {
         if (Math.abs(info.offset.x) > 200) {
           onDragOut?.()
         }
       }}
+      drag
+      dragConstraints={{ left: 0, right: 0, bottom: 0, top: 0 }}
+      dragElastic={1}
+      dragPropagation={true}
     >
       <motion.img
         src={file.thumbnail!.url}
         className={cn('rounded-lg w-[100%] shadow-lg')}
         draggable={false}
         style={{
-          filter: tickBrightness,
           transform: tickRota,
+          //filter: tickBrightness,
         }}
       />
-      <svg className='absolute right-0 top-0 w-[4rem]' viewBox='0 0 24 24'>
-        <motion.path
-          d={LikePath}
-          strokeDasharray='0 1'
-          stroke={color}
-          fill={'none'}
-          strokeWidth={2}
-          style={{ pathLength: tickPath }}
-        />
-      </svg>
+      <motion.div
+        className='absolute top-0 left-0 w-[100%] h-[100%] bg-transparent'
+        style={{ transform: tickRota }}
+      >
+        <svg
+          className='absolute left-0 bottom-0 w-[4rem] fill-transparent'
+          viewBox='0 0 24 24'
+        >
+          <motion.path
+            d={LikePath}
+            strokeDasharray='0 1'
+            stroke={color}
+            strokeWidth={2}
+            style={{ pathLength: tickPath }}
+          />
+        </svg>
+      </motion.div>
     </motion.div>
   )
 }
